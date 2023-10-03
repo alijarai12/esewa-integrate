@@ -1,0 +1,30 @@
+{% extends 'app/newbase.html' %}
+
+{% block title %}Register{% endblock title %}
+
+
+{% block main-content %} 
+
+<br>
+<br>
+<div class="container mt-5">
+
+<!-- <div class="card text-center w-75"> -->
+<div class="card w-75">
+
+  <h5 class="card-header">Login Form</h5>
+    <div class="card-body">
+      <form action="" method="post">
+          {% csrf_token %}
+           {{form.as_p}}
+           <input type="submit" value="Submit">
+        <a href="{% url 'register' %}">Not Register yet?</a>
+      </form>
+    </div>
+  </div>
+
+</div>
+<br>
+<br>
+
+{% endblock main-content %}

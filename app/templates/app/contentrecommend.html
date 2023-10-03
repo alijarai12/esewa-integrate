@@ -1,0 +1,85 @@
+{% extends 'app/newbase.html' %}
+{% load static %}
+
+{% block title %}Recommend{% endblock title %}
+
+{% block main-content %} 
+<!-- <div class="container">
+    <legend>Search related Product</legend>
+    <form method="post">
+        {% csrf_token %}
+        <input type="search" name="product_name" value="{{ product_name }}"><br /><br />
+        <input type="submit" value="Submit">
+    </form>
+    <br />
+    <h1>Recommended Products:</h1>
+    <ul>
+        {% for product in recommended_products %}
+            <li>{{ product }}</li>
+        {% endfor %}
+    </ul>
+</div> -->
+
+
+<h1>Recommended Products</h1>
+{% for product, avg_rating in recommended_products %}
+    <li>
+        <h3>{{ product.name }}</h3>
+        <p>Average Rating: {{ avg_rating|default:"Not Rated Yet" }}</p>
+        {% if product.pk %}
+            <a href="{% url 'productdetail' pk=product.pk %}">View Product Details</a>
+        {% endif %}
+    </li>
+{% endfor %}
+    
+<!-- 
+<div class="container">
+    <form class="search" action="" method="POST">
+        <h4> The product you want to recommend.</h4> <br>
+        {% csrf_token %}
+        <input type="text" class="searchTerm" id="autoComplete" autocomplete="off" name="product_name" placeholder="Enter a full product name">
+        <button class="searchButton" type="submit" value="Submit">Recommend</button>
+    </form>
+
+<br>
+
+        <div>
+                    
+                {% if product_not_found %}
+                <br>
+                <h2>Product Not Found</h2>
+                {% elif recommended_products %}
+                <h2>Recommended Products for You.</h2>
+                <ul style=" display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+                gap: 2rem;">
+                    {% for product in recommended_products %}
+                    <div>
+                        <div class="box-element product">
+                            <a href="{% url 'productdetail' product.id %}" class="btn">
+                                <div class="item">
+                                    <img class="thumbnail" src="{{ product.product_image_url }}" alt="" height="200px" width="200px"> <br>
+                                    <span class="fw-bold">{{ product.name }}</span><br>
+                                    <span class="fw-bold">Per {{ product.unit }}</span><br>
+                                    <span class="fs-5">Rs.{{ product.price }}</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+        </div>
+
+
+</div>
+ -->
+
+
+
+<br>
+
+
+
+{% endblock main-content %}

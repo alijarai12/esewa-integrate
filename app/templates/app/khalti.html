@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>I am implementing khalti payment gateway</h1>
+    <h1>Put your own live secret key.Otherwise you will get error</h1>
+    <form action="{% url 'initiate' %}" method="POST">
+        {%csrf_token%}
+        <input type="hidden" name="purchase_order_id" value="{{uuid}}"  id="pid">
+        <input type="hidden" name="amount" value="1000" id="amt">
+        <input type="submit" value="Pay With Khalti" name="" id="">
+        <input type="hidden" name="return_url" value="http://127.0.0.1:8000/verify">
+    </form>
+</body>
+</html>

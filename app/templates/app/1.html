@@ -1,0 +1,74 @@
+{% extends 'app/newbase.html' %}
+{% load static %}
+
+{% block title %}Product Detail{% endblock title %}
+
+{% block main-content %}
+<div class="container overflow-hidden">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <img src="{{ product.product_image.url }}" alt="{{ product.name }}" class="img-fluid">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="fw-bold">{{ product.name }}</h3>
+      <hr />
+      <p class="text-muted text-uppercase">{{ product.description }}</p>
+      <h5 class="font-weight-light">Per {{ product.unit }}</h5>
+      <h4>Rs. {{ product.price }}</h4>
+
+      <form action="{% url 'add_to_cart' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="prod_id" value="{{ product.id }}" id="product_id">
+        <button type="submit" class="btn btn-primary btn-block mt-3">Add to Cart</button>
+      </form>
+
+      <form method="post" class="mt-4">
+        {% csrf_token %}
+        <h4 class="mb-3">Submit Your Rating:</h4>
+        <div class="rating">
+          <input type="radio" name="rating" value="1" id="rating1">
+          <label for="rating1">1</label>
+          <input type="radio" name="rating" value="2" id="rating2">
+          <label for="rating2">2</label>
+          <input type="radio" name="rating" value="3" id="rating3">
+          <label for="rating3">3</label>
+          <input type="radio" name="rating" value="4" id="rating4">
+          <label for="rating4">4</label>
+          <input type="radio" name="rating" value="5" id="rating5">
+          <label for="rating5">5</label>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Submit Rating</button>
+      </form>
+
+      <div class="mt-4">
+        <h4>All Ratings:</h4>
+        <ul class="list-unstyled">
+          {% for rating in all_ratings %}
+            <li>{{ rating.rating }} by {{ rating.user }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <h2 class="mb-3">Related Products</h2>
+  {% for rp in related_product %}
+    <div class="col-lg-4">
+      <div class="box-element product">
+        <a href="{% url 'productdetail' rp.id %}" class="btn">
+          <div class="item">
+            <img class="thumbnail" src="{{ rp.product_image.url }}" alt="" height="200px">
+            <span class="fw-bold d-block">{{ rp.name }}</span>
+            <span class="fw-bold">Per {{ rp.unit }}</span>
+            <span class="fs-5 d-block">Rs. {{ rp.price }}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock main-content %}

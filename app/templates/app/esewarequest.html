@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #myform{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h3 style="text-align: center;">You will be redirected to the esewa website..</h3>
+    <form action="http://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST" id="myform">
+        <input type="text" id="access_key" name="access_key" value="your_access_key" required>
+        <input type="text" id="amount" name="amount" value="100" required>
+        <input type="text" id="tax_amount" name="tax_amount" value="10" required>
+        <input type="text" id="total_amount" name="total_amount" value="110" required>
+        <input type="text" id="transaction_uuid" name="transaction_uuid" required>
+        <input type="text" id="product_code" name="product_code" value="EPAYTEST" required>
+        <input type="text" id="product_service_charge" name="product_service_charge" value="0" required>
+        <input type="text" id="product_delivery_charge" name="product_delivery_charge" value="0" required>
+        <input type="text" id="success_url" name="success_url" value="https://esewa.com.np" required>
+        <input type="text" id="failure_url" name="failure_url" value="https://google.com" required>
+        <input type="text" id="signed_field_names" name="signed_field_names" value="access_key,amount,tax_amount,total_amount,transaction_uuid,product_code,product_service_charge,product_delivery_charge,success_url,failure_url" required>
+        <input type="text" id="signature" name="signature" required>
+
+        <input value="Submit" type="submit">
+    </form>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac-sha256.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/enc-base64.min.js"></script>
+    <script>
+        // JavaScript to calculate the signature dynamically
+        var secret_key = "8gBm/:&EnhH.1/q("; // Use the provided UAT secret key here
+        var dataToHash = "10010ab14a8f2b02c3EPAYTEST"; // Update with your data
+        
+        // Function to calculate the SHA-256 hash
+        function calculateSignature() {
+            var hash = CryptoJS.HmacSHA256(dataToHash, secret_key);
+            var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+            document.getElementById("signature").value = hashInBase64;
+        }
+    
+        // Calculate the signature on page load
+        calculateSignature();
+    </script>
+    
+</body>
+</html>

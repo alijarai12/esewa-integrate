@@ -1,0 +1,66 @@
+<!-- extending base.html -->
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Product Detail{% endblock title %}
+
+{% block main-content %}
+<br>
+<br>
+<br>
+<div class="container overflow-hidden text-center">
+    <div class="row gx-5">
+        <div class="col">
+            <img src="{{product.product_image.url}} " alt="" height="200px">
+        </div>
+
+        <div class="col">
+            <h3>{{product.name}}</h3>
+                <hr>
+
+                   <p>{{product.description}}</p>
+                   <h5>Per {{product.unit}}</h5>
+                   <h4>Rs. {{product.price}} </h4>
+                
+
+
+                <div class="row align-items-stretch mb-4">
+                    <div class="col-sm-5 pr-sm-0">
+                       
+                    </div>
+    
+                    <div class="col-sm-3 pl-sm-0">
+                        <form action="{% url 'add_to_cart' %}">
+                            <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                            <button type="submit" class="btn btn-dark btn-lg btn-block h-100 d-flex align-items-center justify-content-center px-0">Add to Cart</button>
+                        </form>
+                    
+                    </div>
+                
+                <hr>
+
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="row">
+
+    <h2>Related Product</h2>
+        {% for rp in related_product %}
+
+        <div class="col-lg-4">
+            <div class="box-element product">
+                <a href="{% url 'productdetail' rp.id %}" class="btn">
+                    <div class="item"><img class="thumbnail" src="{{rp.product_image.url}}" alt="" height="200px"><br>
+                        <span class="fw-bold">{{rp.name}}</span><br>
+                        <span class="fw-bold">Per {{rp.unit}}</span><br><span class="fs-5">Rs.{{rp.price}}</span></div></a>
+                    
+            </div>
+        </div>
+
+
+        {% endfor %}
+    <br>
+
+    </div>
+{% endblock main-content %}

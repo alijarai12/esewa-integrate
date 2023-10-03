@@ -1,0 +1,29 @@
+{% extends 'app/newbase.html' %}
+
+{% block title %}Register{% endblock title %}
+
+
+{% block main-content %} 
+
+<br>
+<br>
+<div class="container mt-5">
+
+    <!-- <a href="{% url 'profile' %}">Home ></a><a href="{% url 'profile' %}"> My Account > </a><a href="{% url 'profile' %}">Profile</a> -->
+    <span>Home> My Account > Profile</span>
+<hr>
+
+<small {% if message.tags %} class='{{message.tags}}' {% endif %}> {{message}} </small>
+<span>{{message}}</span>
+
+<form action="" method="post" novalidate>
+    {% csrf_token %}
+    {{fm.as_p}}
+
+    <input type="submit" value="Update">
+</form>
+
+
+</div>
+<br>
+{% endblock main-content %}

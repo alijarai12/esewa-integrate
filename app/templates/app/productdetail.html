@@ -1,0 +1,143 @@
+{% extends 'app/newbase.html' %}
+{% load static %}
+
+{% block title %}Product Detail{% endblock title %}
+
+{% block main-content %}
+<div class="container overflow-hidden">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <img src="{{ product.product_image.url }}" alt="{{ product.name }}" class="img-fluid">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="fw-bold">{{ product.name }}</h3>
+      <hr />
+      <p class="text-muted text-uppercase">{{ product.description }}</p>
+      <h5 class="font-weight-light">Per {{ product.unit }}</h5>
+      <h4>Rs. {{ product.price }}</h4>
+
+      <form action="{% url 'add_to_cart' %}">
+        <input
+          type="hidden"
+          name="prod_id"
+          value="{{product.id}}"
+          id="product_id"
+        />
+        <button
+          type="submit"
+      style="background: #f17981;
+        color: #fff;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: none;
+        padding: 12px 40px;
+        cursor: pointer; 
+        border: none;"
+                  >
+          Add to Cart
+        </button>
+      </form>
+
+      <form method="post">
+        {% csrf_token %}
+      <div class="rating-form mt-4">
+        <h4 class="mb-3">Submit Your Rating:</h4>
+        {% if messages %}
+          <div class="alert custom-success-alert alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endif %}
+        <div class="rating">
+          <input type="radio" name="rating" value="1" id="rating1">
+          <label for="rating1">1</label>
+          <input type="radio" name="rating" value="2" id="rating1">
+          <label for="rating1">2</label>
+          <input type="radio" name="rating" value="3" id="rating1">
+          <label for="rating1">3</label>
+          <input type="radio" name="rating" value="4" id="rating1">
+          <label for="rating1">4</label>
+          <input type="radio" name="rating" value="5" id="rating1">
+          <label for="rating1">5</label>
+          <!-- Repeat for other ratings -->
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="review">Write a Review:</label>
+          <textarea class="form-control" name="review" id="review" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Submit Rating</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <button class="btn btn-link" data-toggle="collapse" data-target="#all-ratings" style="color: white; background-color: #ff6b6b; border: none; border-radius: 5px; padding: 8px 15px; text-decoration: none;">Ratings and Reviews</button>
+      <div id="all-ratings" class="collapse">
+        <!-- Your existing code for displaying ratings and reviews -->
+
+        <h4>All Ratings and Reviews:</h4>
+      <div class="review-cards">
+        {% for rating in all_ratings %}
+          <div class="review-card">
+            <!-- <div class="rating-stars">
+              {% if rating.rating == 1 %}
+                <span class="star-icon">&#9733;</span>
+              {% elif rating.rating == 2 %}
+                <span class="star-icon">&#9733;&#9733;</span>
+              {% elif rating.rating == 3 %}
+                <span class="star-icon">&#9733;&#9733;&#9733;</span>
+              {% elif rating.rating == 4 %}
+                <span class="star-icon">&#9733;&#9733;&#9733;&#9733;</span>
+              {% elif rating.rating == 5 %}
+                <span class="star-icon">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+              {% endif %}
+              
+            </div> -->
+            <div class="review-content">
+              <p class="star-rating">{{ rating.rating }} rating</p>
+              <p class="fw-bold">{{ rating.user }}</p>
+              
+              <p>{{ rating.review }}</p>
+              <hr>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+
+
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="row mt-5">
+  <h2 class="mb-3">Related Products</h2>
+  {% for rp in related_product %}
+    <div class="col-lg-4">
+      <div class="box-element product">
+        <a href="{% url 'productdetail' rp.id %}" class="btn">
+          <div class="item">
+            <img class="thumbnail" src="{{ rp.product_image.url }}" alt="" height="200px">
+            <span class="fw-bold d-block">{{ rp.name }}</span>
+            <span class="fw-bold">Per {{ rp.unit }}</span>
+            <span class="fs-5 d-block">Rs. {{ rp.price }}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock main-content %}

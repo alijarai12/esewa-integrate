@@ -1,0 +1,38 @@
+{% extends 'app/newbase.html' %}
+{% load static %}
+
+{% block title %}Recommend{% endblock title %}
+
+{% block main-content %}
+
+<div class="container">
+    <h2 class="page_heading" style="color: white; text-align: center; background-color: #f17981; margin-top: 2rem; margin-bottom: 2rem; font-size: 1.25rem; font-weight: 350px; padding-block: 0.5rem;">Recommended Products</h2>
+    <div class="row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 2rem;">
+
+        {% for product, avg_rating in collaborative_products %}
+        <div class="col-md-4">
+            <div class="card" style="border: 1px solid #ededed;">
+                <div class="card-body text-center">
+                    <a href="{% url 'productdetail' product.id %}" class="btn btn-link">
+                        <div class="item">
+                            <h5 class="fw-bold text-uppercase">{{ product.name }}</h5>
+                            <img class="thumbnail" src="{{ product.product_image.url }}" alt="{{ product.name }}" height="150px" width="150px">
+                            <div class="mt-3">
+                                <span class="fw-bold">Per {{ product.unit }}</span>
+                                <p class="fs-5">Rs.{{ product.price }}</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="d-flex justify-content-between mt-3">
+                        <i class="fa fa-shopping-cart" style="color: gray; cursor: pointer;"></i>
+                        <a href="{% url 'productdetail' product.id %}" class="btn btn-primary">More Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock main-content %}

@@ -1,0 +1,39 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Register{% endblock title %}
+
+
+{% block main-content %} 
+
+<br>
+<br>
+<div class="container mt-5">
+
+<!-- <div class="card text-center w-75"> -->
+<div class="card w-75">
+
+  <h5 class="card-header">Register Form</h5>
+    <div class="card-body">
+
+      {% if messages %}
+      <div class="alert custom-success-alert alert-dismissible fade show" role="alert">
+          {% for message in messages %}
+          {{ message }}
+          {% endfor %}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+
+      <form action="" method="post">
+          {% csrf_token %}
+           {{form.as_p}}
+           <input type="submit" value="Submit">
+        
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<br><br>
+{% endblock main-content %}

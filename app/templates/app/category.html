@@ -1,0 +1,44 @@
+{% extends 'app/newbase.html' %}
+{% load static %}
+
+{% block title %}Register{% endblock title %}
+
+
+{% block main-content %}
+<div class="container">
+    <div class="row">
+        {% for cat in category %}
+        <h2 style="    margin-top: 30px;margin-bottom: 30px;">{{cat.category_name}}</h2>
+        <div class="row" style=" display: grid;
+        	grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));gap: 2rem;">
+            {% for p in cat.products.all %}
+            <div style="border:1px solid #ededed;">
+                <div class="box-element product" style="
+                padding: 15px 24px;
+                text-align:center;
+                margin-bottom:20px;">
+                    <a href="{% url 'productdetail' p.id %}" class="btn">
+                        <div class="item">
+                            <span class="fw-bold" style="text-transform: uppercase;">{{p.name}}</span><br><br>
+                            <img class="thumbnail" src="{{p.product_image.url}}" alt="" height="150px"
+                                width="150px" style="object-fit: cover;"><br>
+                            <div style="display: grid;margin-top: 0.75rem;">
+                                <span class="fw-bold">Per {{p.unit}}</span><br>
+                                <span class="fs-5">Rs.{{p.price}}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; margin-top: 0.75rem; height: 20px; align-items: center; margin-block: 0.75rem; margin-inline: 0.75rem;">
+                    <i class="fa fa-shopping-cart" style="color: gray; cursor: pointer;"></i>
+                    <a href="{% url 'productdetail' p.id %}" class="btn btn-primary" style="background-color: rgb(236, 133, 133);">More Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock main-content %}

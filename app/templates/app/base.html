@@ -1,0 +1,91 @@
+<!-- extending base.html -->
+{% extends 'app/newbase.html' %} {% load static %} {% block title %}Product
+Detail{% endblock title %} {% block main-content %}
+<br />
+<br />
+<br />
+<div class="container overflow-hidden">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; margin-block: 2rem;">
+    <div>
+      {% for p in lat_prod %}
+      <img src="{{p.product_image.url}} " alt="" height="400px" width="500px" />
+      {% endfor %}
+    </div>
+
+    <div style="display: grid;">
+      {% for p in lat_prod %}
+     <div>
+        <h3 style="color: #000;
+        font-size: 36px;
+        line-height: 28px;
+        text-transform: none;
+        font-weight: 300;">{{p.name}}</h3>
+        <p style="color: #9e9e9e; text-transform: uppercase; padding-top: 10px;">{{p.description}}</p>
+        <h5 style="    font-size: 24px;
+        color: #000;
+        font-weight: 300;">Per {{p.unit}}</h5>
+        <h4>Rs. {{p.price}}</h4>
+     </div>
+
+      <div style="display: grid; justify-content: end;
+      align-items: center">
+        <div>
+
+        </div>
+        <div>
+          <form action="{% url 'add_to_cart' %}">
+            <input
+              type="hidden"
+              name="prod_id"
+              value="{{p.id}}"
+              id="product_id"
+            />
+            <button
+              type="submit"
+            style="background: #f17981;
+            color: #fff;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            padding: 12px 40px;
+            cursor: pointer; 
+            border: none;"
+            >
+              Add to Cart
+            </button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container row">
+  <h2>Related Product</h2>
+  {% for rp in related_product %}
+
+  <div class="col-lg-4">
+    <div class="box-element product">
+      <a href="{% url 'productdetail' rp.id %}" class="btn">
+        <div class="item">
+          <img
+            class="thumbnail"
+            src="{{rp.product_image.url}}"
+            alt=""
+            height="200px"
+          /><br />
+          <span class="fw-bold">{{rp.name}}</span><br />
+          <span class="fw-bold">Per {{rp.unit}}</span><br /><span class="fs-5"
+            >Rs.{{rp.price}}</span
+          >
+        </div></a
+      >
+    </div>
+  </div>
+
+  {% endfor %}
+  <br />
+</div>
+{% endblock main-content %}
