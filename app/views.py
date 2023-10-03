@@ -1,4 +1,5 @@
 import decimal
+import json
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, redirect
 from .forms import*
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -13,6 +14,10 @@ from django.urls import reverse
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 import pandas as pd
 import numpy as np
+import hmac
+import hashlib
+import base64
+import uuid
 
 
 
@@ -240,12 +245,16 @@ def cart(request):
     else:
         fm = CheckoutForm()
 
+    
+
     context = {
         'cart_products': cart_products,
         'amount':amount,
         'total_amount':total_amount ,
         'shipping':shipping,
-        'form':fm
+        'form':fm,
+        'uuid':uuid.uuid4(),
+        # 'signature':genSHA()
 
        }
 
@@ -284,6 +293,7 @@ def minus_cart(request, cart_id):
 
 @login_required
 def checkout(request):
+    print("checkout called")
     user = request.user
     address_id = request.get('address')
     address = get_object_or_404(Address, id=address_id)    
@@ -291,6 +301,8 @@ def checkout(request):
     
     # Get all the products of User in Cart
     cart = Cart.objects.filter(user=user)
+    
+
     for c in cart:
         # Saving all the products from Cart to Order
         Ordered(user=user, address=address, product=c.product, quantity=c.quantity,payment_method=payment).save()
@@ -302,6 +314,15 @@ def checkout(request):
         # And Deleting from Cart
         
     return redirect('cart')
+
+def createOrderThroughEsewa(request):
+    if request.method == 'GET':
+        user = request.user
+        address_id = request.get('address')
+        address = get_object_or_404(Address, id=address_id)
+    if request.method == 'POST':
+        pass
+
 
 
 # class EsewaRequestView(View):
@@ -481,3 +502,50 @@ def user_change_pass1(request):
 def user_logout(request):
     logout (request)
     return HttpResponseRedirect('/accounts/login/')
+
+@login_required
+def placeEsewaOrder(request,address,mobile):
+    if request.method == 'GET':
+        try:
+            print('get request called')
+            data = request.GET.get('data')
+            address = address
+            mobile = int(mobile)
+            decoded_data = base64.b64decode(data).decode('utf-8')
+            print(decoded_data)
+            map_data = json.loads(decoded_data)
+
+
+            cart_products = Cart.objects.filter(user=request.user)
+            cp = [p for p in Cart.objects.all() if p.user==request.user]
+            amount = decimal.Decimal(0)
+            total_amount=0
+            shipping = 100
+            if cp:
+                for p in cp:
+                    temp_amount = (p.quantity*p.product.price)
+                    amount += temp_amount
+                    
+                    total_amount = amount + shipping
+            print("status======",map_data.get('status'))
+            if map_data.get('status') == 'COMPLETE':
+                # Get all the products of User in Cart
+                cart = Cart.objects.filter(user=request.user)
+                for c in cart:
+                    corder = Ordered(user=c.user, product=c.product, address=address,mobile=mobile,quantity= c.quantity, total=total_amount, payment_method='Esewa')
+                    corder.save()
+                    
+                    c.delete()
+                    print("payment completed with esewa")
+                    return redirect('index')
+                        
+                    # And Deleting from Cart
+                    c.delete()
+                    
+            # return redirect('index')
+            else:
+                print("payment not succeded")
+                # display message to user informing payment not succeded
+                return redirect('index')
+        except Exception as e:
+            print(e)

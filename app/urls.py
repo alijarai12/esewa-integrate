@@ -60,5 +60,7 @@ urlpatterns = [
 
     #path('eg/', views.example, name='eg'),
 
+    path('place-esewa-order/<str:address>/<int:mobile>',placeEsewaOrder,name='place-esewa-order')
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
