@@ -253,7 +253,12 @@ def cart(request):
         message = message.encode('utf-8')
 
         hmac_sha256 = hmac.new(key, message, hashlib.sha256)
-        return hmac_sha256.hexdigest()
+        digest = hmac_sha256.digest()
+
+        # Convert the digest to a Base64-encoded string
+        signature = base64.b64encode(digest).decode('utf-8')
+
+        return signature
 
     uuid_val = uuid.uuid4()
     # Example usage:
