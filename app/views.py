@@ -263,8 +263,8 @@ def cart(request):
     uuid_val = uuid.uuid4()
     # Example usage:
     secret_key = "8gBm/:&EnhH.1/q"
-    data_to_sign = f"{total_amount},{uuid},EPAYTEST"
-
+    data_to_sign = f"{total_amount},{uuid_val},EPAYTEST"
+    print(data_to_sign)
     result = genSha256(secret_key, data_to_sign)
     print("HMAC/SHA256:", result)
 
