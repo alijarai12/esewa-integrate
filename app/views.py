@@ -208,6 +208,9 @@ def add_to_cart(request):
 
     return redirect('cart')
 
+
+import hmac
+import hashlib
 @login_required
 def cart(request):
     user = request.user
@@ -245,7 +248,20 @@ def cart(request):
     else:
         fm = CheckoutForm()
 
-    
+    def genSha256(key, message):
+        key = key.encode('utf-8')
+        message = message.encode('utf-8')
+
+        hmac_sha256 = hmac.new(key, message, hashlib.sha256)
+        return hmac_sha256.hexdigest()
+
+    uuid_val = uuid.uuid4()
+    # Example usage:
+    secret_key = "8gBm/:&EnhH.1/q"
+    data_to_sign = f"{total_amount},{uuid},EPAYTEST"
+
+    result = genSha256(secret_key, data_to_sign)
+    print("HMAC/SHA256:", result)
 
     context = {
         'cart_products': cart_products,
@@ -253,8 +269,8 @@ def cart(request):
         'total_amount':total_amount ,
         'shipping':shipping,
         'form':fm,
-        'uuid':uuid.uuid4(),
-        # 'signature':genSHA()
+        'uuid':uuid_val,
+        'signature':result
 
        }
 
